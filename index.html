@@ -1,0 +1,128 @@
+<!DOCTYPE html><html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Kids Learning App</title>  <!-- React CDN -->  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>  <!-- Babel -->  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #fff8f0;
+      text-align: center;
+    }
+    button {
+      padding: 10px 15px;
+      margin: 8px;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      background: #ffcc80;
+    }
+    h1 { color: #ff7043; }
+    .card {
+      background: white;
+      margin: 10px;
+      padding: 15px;
+      border-radius: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+  </style></head><body>
+<div id="root"></div><script type="text/babel">
+
+const { useState } = React;
+
+function App() {
+  const [screen, setScreen] = useState("home");
+
+  return (
+    <div>
+      <h1>Kids Learning App 🎈</h1>
+
+      {screen === "home" && (
+        <div className="card">
+          <button onClick={()=>setScreen("alphabet")}>🔤 Alphabet</button>
+          <button onClick={()=>setScreen("numbers")}>🔢 Numbers</button>
+          <button onClick={()=>setScreen("animals")}>🐶 Animals</button>
+          <button onClick={()=>setScreen("quiz")}>❓ Quiz</button>
+        </div>
+      )}
+
+      {screen === "alphabet" && <Alphabet goBack={()=>setScreen("home")} />}
+      {screen === "numbers" && <Numbers goBack={()=>setScreen("home")} />}
+      {screen === "animals" && <Animals goBack={()=>setScreen("home")} />}
+      {screen === "quiz" && <Quiz goBack={()=>setScreen("home")} />}
+    </div>
+  );
+}
+
+function Alphabet({goBack}) {
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+  return (
+    <div className="card">
+      <h2>Alphabet</h2>
+      {letters.map(l => <button key={l}>{l}</button>)}
+      <br/>
+      <button onClick={goBack}>⬅ Back</button>
+    </div>
+  );
+}
+
+function Numbers({goBack}) {
+  const nums = Array.from({length: 20}, (_,i)=>i+1);
+
+  return (
+    <div className="card">
+      <h2>Numbers</h2>
+      {nums.map(n => <button key={n}>{n}</button>)}
+      <br/>
+      <button onClick={goBack}>⬅ Back</button>
+    </div>
+  );
+}
+
+function Animals({goBack}) {
+  const animals = ["🐶 Dog","🐱 Cat","🐘 Elephant","🦁 Lion","🐯 Tiger"];
+
+  return (
+    <div className="card">
+      <h2>Animals</h2>
+      {animals.map(a => <div key={a}>{a}</div>)}
+      <br/>
+      <button onClick={goBack}>⬅ Back</button>
+    </div>
+  );
+}
+
+function Quiz({goBack}) {
+  const [score, setScore] = useState(0);
+  const [q, setQ] = useState(0);
+
+  const questions = [
+    {q:"A for ?", options:["Apple","Ball"], ans:"Apple"},
+    {q:"2 + 2 ?", options:["3","4"], ans:"4"}
+  ];
+
+  function answer(opt){
+    if(opt === questions[q].ans) setScore(score+1);
+    if(q < questions.length-1) setQ(q+1);
+    else alert("Score: "+(score+1));
+  }
+
+  return (
+    <div className="card">
+      <h2>Quiz</h2>
+      <p>{questions[q].q}</p>
+      {questions[q].options.map(o=>(
+        <button key={o} onClick={()=>answer(o)}>{o}</button>
+      ))}
+      <br/>
+      <button onClick={goBack}>⬅ Back</button>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+
+</script></body>
+</html>
